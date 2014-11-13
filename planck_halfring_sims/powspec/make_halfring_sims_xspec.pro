@@ -14,14 +14,39 @@ pro make_halfring_sims_xspec, freq, planck_dr, ifield
 
     print, field_name
     
-    sidx = strcompress(string(num_sims-1),/remove)
-    dls_sims_savfile = workpath+field_name+'/sim_dls/dls_halfring_noise_cross_0sims'+sidx+'.sav'
+    sidx = strcompress(string(num_sims-1),/remove) 
 
     res = file_info(dls_sims_savfile)
 
     if res.exists then begin
         restore, dls_sims_savfile
     endif else begin
+        ;; run 1, for xspec of halfring badkground+noise sims (beam uncert is probably included in sims)
+        mapname = 'MAP.MAP'
+        sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
+        dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_xspec'
+        dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
 
+        run_halfring_sims_xspec, ifield, sim_map_root, num_sims, $
+        mapname=mapname, $
+        workpath=workpath, beamfile=beamfile, $
+        bandcenters=bandcenters, dls_sims=dls_sims, $
+        dls_sav_root=dls_sav_root, $
+        /delete_intfile, /resume
+        save, bandcenters, dls_sims, filename=dls_sims_savfile
+
+        ;; run 2, for xspec of halfring noise sims
+        mapname = 'DMAP.MAP'
+        sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
+        dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_noise_xspec'
+        dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
+
+        run_halfring_sims_xspec, ifield, sim_map_root, num_sims, $
+        mapname=mapname, $
+        workpath=workpath, beamfile=beamfile, $
+        bandcenters=bandcenters, dls_sims=dls_sims_noise, $
+        dls_sav_root=dls_sav_root, $
+        /delete_intfile, /resume
+        save, bandcenters, dls_sims_noise, filename=dls_sims_savfile
     endelse
 end
