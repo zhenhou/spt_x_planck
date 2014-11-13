@@ -16,17 +16,16 @@ pro make_halfring_sims_xspec, freq, planck_dr, ifield
     
     sidx = strcompress(string(num_sims-1),/remove) 
 
-    res = file_info(dls_sims_savfile)
+    ;; run 1, for xspec of halfring badkground+noise sims (beam uncert is probably included in sims)
+    mapname = 'MAP.MAP'
+    sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
+    dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_xspec'
+    dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
 
-    if res.exists then begin
+    res = file_info(dls_sims_savfile)
+    if (res.exists) then begin
         restore, dls_sims_savfile
     endif else begin
-        ;; run 1, for xspec of halfring badkground+noise sims (beam uncert is probably included in sims)
-        mapname = 'MAP.MAP'
-        sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
-        dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_xspec'
-        dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
-
         run_halfring_sims_xspec, ifield, sim_map_root, num_sims, $
         mapname=mapname, $
         workpath=workpath, beamfile=beamfile, $
@@ -34,13 +33,18 @@ pro make_halfring_sims_xspec, freq, planck_dr, ifield
         dls_sav_root=dls_sav_root, $
         /delete_intfile, /resume
         save, bandcenters, dls_sims, filename=dls_sims_savfile
+    endelse
 
-        ;; run 2, for xspec of halfring noise sims
-        mapname = 'DMAP.MAP'
-        sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
-        dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_noise_xspec'
-        dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
+    ;; run 2, for xspec of halfring noise sims
+    mapname = 'DMAP.MAP'
+    sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
+    dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_noise_xspec'
+    dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
 
+    res = file_info(dls_sims_savfile)
+    if (res.exists) then begin
+        restore, dls_sims_savfile
+    endif else begin
         run_halfring_sims_xspec, ifield, sim_map_root, num_sims, $
         mapname=mapname, $
         workpath=workpath, beamfile=beamfile, $
