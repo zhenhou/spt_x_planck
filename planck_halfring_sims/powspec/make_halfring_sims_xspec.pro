@@ -20,7 +20,7 @@ pro make_halfring_sims_xspec, freq, planck_dr, ifield
     mapname = 'MAP.MAP'
     sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
     dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_xspec'
-    dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
+    dls_sims_savfile = workpath+'/'+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
 
     res = file_info(dls_sims_savfile)
     if (res.exists) then begin
@@ -39,7 +39,7 @@ pro make_halfring_sims_xspec, freq, planck_dr, ifield
     mapname = 'DMAP.MAP'
     sim_map_root = 'hfi_'+freq_str+'_ringhalf_'+['1','2']
     dls_sav_root = 'dls_hfi_'+freq_str+'_ringhalf_noise_xspec'
-    dls_sims_savfile = workpath+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
+    dls_sims_savfile = workpath+'/'+field_name+'/sim_dls/'+dls_sav_root+'_0sims'+sidx+'.sav'
 
     res = file_info(dls_sims_savfile)
     if (res.exists) then begin
