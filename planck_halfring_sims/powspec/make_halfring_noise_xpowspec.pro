@@ -1,6 +1,8 @@
 pro make_halfring_noise_xpowspec, ifield, bandcenters, dls_noise_sims
     
-    num_sims = 50L
+    num_sims = 400L
+
+    data_path = getenv('DATAPATH')
 
     mapfile_path = '/data23/hou/projects/spt_x_planck/reproj/'
     mapfile_root = ['hfi_CovMap_143_nominal_ringhalf_1_maxOrder4_prj','hfi_CovMap_143_nominal_ringhalf_2_maxOrder4_prj']
