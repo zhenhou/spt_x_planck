@@ -48,12 +48,3 @@ class ShowImage(object):
         if yticks != None: plt.yticks(yticks)
         if xtitle != None: plt.xlabel(xtitle)
         if ytitle != None: plt.ylabel(ytitle)
-        
-#plt.axis([self.xra[0], self.xra[1], self.yra[0], self.yra[1]])
-#plt.show()
-#plt.gca().invert_yaxis()
-#plt.xlim(self.xra)
-#plt.ylim(self.yra) 
-#plt.xlabel(r'$\rm{RA}$')
-#plt.ylabel(r'$\rm{DEC}$')
-#plt.show()
