@@ -33,18 +33,34 @@ class ShowImage(object):
 
         del tmp
         
+    def cut_map(self, xra, yra):
+        xarr = np.arange(0,self.nsidex)/60.0 + self.ra0 - 0.5*self.nsidex/60.00
+        yarr = np.arange(0,self.nsidey)/60.0 + self.dec0 - 0.5*self.nsidey/60.00
+
+        ipx = np.where((xarr >= min(xra)) & (xarr <= max(xra)))
+        ipy = np.where((yarr >= min(yra)) & (yarr <= max(yra)))
+
+        self.map2d_cut = self.map2d[ipx[0].min():(ipx[0].max()+1),ipy[0].min():(ipy[0].max()+1)]
 
 
-    def make_image(self, scale=1.0, vmin=None, vmax=None, savefile=None, xticks=None, yticks=None, xtitle=None, ytitle=None, cbticks=None, cbformat=None, cbtitle=None):
+    def make_image(self, scale=1.0, vmin=None, vmax=None, xra=None, yra=None, savefile=None, xticks=None, yticks=None, xtitle=None, ytitle=None, xfontsize=None, yfontsize=None, \
+        cbticks=None, cbticks_fontsize=14, cbformat=None, cbtitle=None, cbtitle_xpos=4.0, cbtitle_fontsize=16):
+
         fig, ax = plt.subplots()
+        
+        if xra is None: xra = self.xra
+        if yra is None: yra = self.yra
 
-        im = plt.imshow(self.map2d*scale,cmap=plt.get_cmap('bone'), extent=(self.xra[0], self.xra[1], self.yra[0], self.yra[1]), vmin=vmin, vmax=vmax)
+        im = plt.imshow(self.map2d_cut*scale,cmap=plt.get_cmap('bone'), extent=(xra[0],xra[1],yra[0],yra[1]), vmin=vmin, vmax=vmax, interpolation='bicubic')
         cbar = fig.colorbar(im, ticks=cbticks, format=cbformat)
+        cbar.solids.set_edgecolor("face")
+        for t in cbar.ax.get_yticklabels():
+            t.set_fontsize(cbticks_fontsize)
 
         ax = cbar.ax
-        ax.text(1.3,0.5,cbtitle,rotation=270, fontsize=20)
+        ax.text(cbtitle_xpos,0.5,cbtitle,rotation=270, fontsize=cbtitle_fontsize, ha='center', va='center')
 
-        if xticks != None: plt.xticks(xticks)
-        if yticks != None: plt.yticks(yticks)
-        if xtitle != None: plt.xlabel(xtitle)
-        if ytitle != None: plt.ylabel(ytitle)
+        if xticks != None: plt.xticks(xticks, fontsize=xfontsize)
+        if yticks != None: plt.yticks(yticks, fontsize=xfontsize)
+        if xtitle != None: plt.xlabel(xtitle, fontsize=xfontsize)
+        if ytitle != None: plt.ylabel(ytitle, fontsize=yfontsize)
