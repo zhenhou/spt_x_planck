@@ -1,12 +1,13 @@
 HPXDIR = $(HEALPIX)
 HPXINC = $(HPXDIR)/include
 HPXLIB = $(HPXDIR)/lib
+FITSIO = $(HOME)/Projects/CMBtools/cfitsio/cfitsio_intel
 
 FC90    = ifort
 CFLAGS  = -O3 -I. -cm -w -vec_report0 -sox -openmp -openmp_report0 -CB -traceback -fPIC
 FFLAGS  = -lhealpix -lcfitsio -CB -traceback -O3 -fPIC
 
-LIBLINK = -L$(HPXLIB) -L$(FITSIO)/lib -L$(MKLLIB) -mkl
+LIBLINK = -L$(HPXLIB) -L$(FITSIO)/lib -mkl
 
 #PRJ     = test
 PRJ     = driver
