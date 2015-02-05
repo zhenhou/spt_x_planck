@@ -5,7 +5,7 @@ pro do_proj, version=version
     map_type    = 'SkyMap'
 
     freqs = ['100','143','217']
-    types = ['full', 'halfmission-1', 'halfmission-2','year-1','year-2']
+    types = ['halfmission-1', 'halfmission-2','year-1','year-2', 'full']
 
     nfreqs = n_elements(freqs)
     ntypes = n_elements(types)
@@ -31,7 +31,7 @@ pro do_proj, version=version
             
             planck_output_path = data_path+'projects/spt_x_planck/planck_2015/reproj/'
             planck_output_root = 'hfi_'+map_type+'_'+freqs[ifreq]+'_'+version+'_'+types[itype]+'_O'+strcompress(string(max_order),/remove)
-            if types[itype] eq 'nominal' then begin 
+            if types[itype] eq 'full' then begin 
                 jackhalf = 1
                 half_roots = 'hfi_'+map_type+'_'+freqs[ifreq]+'_'+version+'_'+ $
                              ['halfmission-1','halfmission-2']+ $
