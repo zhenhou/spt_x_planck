@@ -1,7 +1,9 @@
-pro rewrite_planck_maps_2014
+pro rewrite_planck_maps_2015
+
+    ;; working on spt ;;
 
     freqs = ['100','143','217']
-    types = ['nominal','missionhalf-1', 'missionhalf-2','year-1','year-2']
+    types = ['nominal', 'full', 'halfmission-1', 'halfmission-2','year-1','year-2']
     nside = 2048
     npix = nside2npix(nside)
 
@@ -10,22 +12,20 @@ pro rewrite_planck_maps_2014
 
     npix_spt = n_elements(where(mask eq 1))
 
-    planck_fits_path = '/data23/hou/planck_data/2014/dpc_maps_hfi/'
-    rewrite_path     = '/data23/hou/planck_data/2014/single_field_maps/'
+    planck_fits_path = '/home/hou/data/planck_data/2015/all_sky_maps/'
+    rewrite_path     = '/home/hou/data/planck_data/2015/single_field_maps/'
 
-    ;;HFI_SkyMap_100_2048_DX11d_missionhalf-1.fits
-    
     num_freqs = n_elements(freqs)
     num_types = n_elements(types)
 
     T_field = 0
-    TT_field = 4
+    TT_field = 2
 
     for i_freq=0, num_freqs-1 do begin
         for i_type=0, num_types-1 do begin
-            input_file = planck_fits_path+'HFI_SkyMap_'+freqs[i_freq]+'_2048_DX11d_'+types[i_type]+'.fits'
-            output_file1 = rewrite_path+'HFI_SkyMap_RING_'+freqs[i_freq]+'_2048_DX11d_'+types[i_type]+'.fits'
-            output_file2 = rewrite_path+'HFI_CovMap_RING_'+freqs[i_freq]+'_2048_DX11d_'+types[i_type]+'.fits'
+            input_file = planck_fits_path+'HFI_SkyMap_'+freqs[i_freq]+'_2048_R2.00_'+types[i_type]+'.fits'
+            output_file1 = rewrite_path+'HFI_SkyMap_RING_'+freqs[i_freq]+'_2048_R2.00_'+types[i_type]+'.fits'
+            output_file2 = rewrite_path+'HFI_CovMap_RING_'+freqs[i_freq]+'_2048_R2.00_'+types[i_type]+'.fits'
 
             res1 = file_info(output_file1)
             res2 = file_info(output_file2)
