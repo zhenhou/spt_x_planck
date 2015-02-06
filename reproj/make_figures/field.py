@@ -2,13 +2,16 @@ from make_figures import *
 import numpy as np
 import matplotlib.pyplot as plt
 
+import os
+
 field = 'ra5h30dec-55_2008'
 si = ShowImage(field)
 
-hfi_path = '/home/zhenhou/scratch-midway2/projects/spt_x_planck/reproj/'
-hfi_map = hfi_path + field + '/hfi_SkyMap_143_DX11d_nominal_O4_prj'
+home = os.getenv('HOME')
+hfi_path = home+'/data/projects/spt_x_planck/planck_2015/reproj/'
+hfi_map = hfi_path + field + '/hfi_SkyMap_143_R2.00_full_O4_prj'
 
-spt_path = '/home/zhenhou/scratch-midway2/projects/spt_x_planck/lps12/coadd_data/'
+spt_path = home+'/data/projects/spt_x_planck/lps12/coadd_data/'
 spt_map = spt_path + 'coadd_'+field+'_50mJy.dat'
 
 si.read_binary_map(hfi_map,dtype=np.float64)
