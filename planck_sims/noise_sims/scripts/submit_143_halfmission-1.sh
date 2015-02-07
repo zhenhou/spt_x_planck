@@ -10,4 +10,4 @@
 
 cd /home/zhenhou/Projects/projects/spt_x_planck/planck_sims/noise_sims
 
-mpirun -np 4 ./sxp_sims ini_zone/hfi_143_ringhalf_1.ini
+mpirun -np 4 ./sxp_sims ini_zone/hfi_143_halfmission-1.ini
