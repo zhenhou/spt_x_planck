@@ -72,4 +72,6 @@ program sxp_sims
             call write_prj(isim)
         endif
     enddo
+
+    call MPI_FINALIZE(IERR)
 end program
