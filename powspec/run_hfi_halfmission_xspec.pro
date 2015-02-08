@@ -15,7 +15,7 @@ pro run_hfi_halfmission_xspec
     
     for ifreq=0, nfreqs-1 do begin
         fstr = strcompress(string(freqs[ifreq]), /remove)
-        mapfile_root = ['hfi_SkyMap_'+fstr+'_R2.00_halfmission-1_O4_prj','hfi_SkyMap_'+fstr+'_R2.00_halfmission-1_O4_prj']
+        mapfile_root = ['hfi_SkyMap_'+fstr+'_R2.00_halfmission-1_O4_prj','hfi_SkyMap_'+fstr+'_R2.00_halfmission-2_O4_prj']
         beamfile     = home+'data/planck_data/2015/beams/hfi_beam_'+fstr+'x'+fstr+'_nominal_wpix_R2.00.txt'
 
         for ifield=0, num_fields-1 do begin
@@ -28,9 +28,7 @@ pro run_hfi_halfmission_xspec
             savfile = dpath+'/dls_halfmission_xspec.sav'
             res = file_info(savfile)
             
-            if res.exists then begin
-                restore, savfile
-            endif else begin
+            if not res.exists then begin
                 run_end2end_planck_field, ifield, $
                 mapfile_path=mapfile_path, mapfile_root=mapfile_root, mapname='MAP.MAP', $
                 beamfile=beamfile, $
@@ -40,7 +38,7 @@ pro run_hfi_halfmission_xspec
                 dls_halfmission_xspec = spectrum[1:*,*]
 
                 save, bandcenters, dls_halfmission_xspec, filename=savfile
-            endelse
+            endif
 
         endfor
 

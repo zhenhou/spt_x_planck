@@ -1,21 +1,29 @@
-pro write_noise_sims_fits, tgz=tgz, copy=copy
+pro write_noise_sims_fits, freq, type=type, tgz=tgz, copy=copy
+    
+    if (not keyword_set(type)) then type='halfmission'
 
     resolve_routine, 'proj_planck_sptsz'
     ;resolve_routine, 'array_1dto2d'
+
+    host = getenv('HOSTNAME')
+    if host eq 'spt' then home='/home/hou/'
+    if host eq  'midway' then home='/home/zhenhou/'
 
     num_sims = 400
     num_fields = 20
 
     f = lps12_fieldstruct()
 
-    bin_path = '/home/zhenhou/scratch-data/projects/spt_x_planck/halfring_noise_sims/'
+    freq_str = strcompress(string(freq), /remove)
+
+    bin_path = home+'data/projects/spt_x_planck/sims/noise/hfi_'+freq_str+'_R2.00_'+type+'/'
 
     for i_field=0, num_fields-1 do begin
         field_name = f[i_field].name
 
         print, field_name
 
-        model_fits_file = '/home/zhenhou/scratch-data/projects/spt_x_planck/reproj/'+field_name+'/hfi_CovMap_143_nominal_ringhalf_1_maxOrder4_prj.fits'
+        model_fits_file = home+'data/projects/spt_x_planck/planck_2015/reproj/'+field_name+'/hfi_SkyMap_'+freq_str+'_R2.00_'+type+'-1_O4_prj.fits.fits'
 
         t = read_spt_fits(model_fits_file)
         nx = long(t.mapinfo.nsidex)
@@ -30,16 +38,32 @@ pro write_noise_sims_fits, tgz=tgz, copy=copy
         for isim=0, num_sims-1 do begin
             sidx = strcompress(string(isim),/remove)
 
-            rh1_bin_file = bin_path+field_name+'/hfi_143_noise_ringhalf_1_sim'+sidx
-            rh2_bin_file = bin_path+field_name+'/hfi_143_noise_ringhalf_2_sim'+sidx
+            rh1_bin_file = bin_path+field_name+'/hfi_'+freq_str+'_R2.00_noise_'+type+'-1_sim'+sidx
+            rh2_bin_file = bin_path+field_name+'/hfi_'+freq_str+'_R2.00_noise_'+type+'-2_sim'+sidx
 
             res1 = file_info(rh1_bin_file)
             res2 = file_info(rh2_bin_file)
 
-            if ((not res1.exists) or (not res2.exists)) then continue
+            if (res1.exists) then begin
+                new_dir = bin_path+field_name+'/bin_maps'
+                file_mkdir, new_dir
+                spawn, ['mv', rh1_bin_file, new_dir+'/'], /no_shell
+                rh1_bin_file = new_dir+'/hfi_143_R2.00_noise_'+type+'-1_sim'+sidx
+            endif
 
-            rh1_fits_file = bin_path+field_name+'/sim_maps/hfi_143_noise_ringhalf_1_sim'+sidx+'.fits'
-            rh2_fits_file = bin_path+field_name+'/sim_maps/hfi_143_noise_ringhalf_2_sim'+sidx+'.fits'
+            if (res2.exists) then begin
+                spawn, ['mv', rh2_bin_file, new_dir+'/'], /no_shell
+                rh2_bin_file = new_dir+'/hfi_143_R2.00_noise_'+type+'-2_sim'+sidx
+            endif
+
+            ;if ((not res1.exists) or (not res2.exists)) then continue
+            
+            fits_dir = bin_path+field_name+'/fits_maps'
+            inf = file_info(fits_dir)
+            if (not inf.exists) then file_mkdir, fits_dir
+
+            rh1_fits_file = fits_dir+'/hfi_'+freq_str+'_R2.00_noise_'+type+'-1_sim'+sidx+'.fits'
+            rh2_fits_file = fits_dir+'/hfi_'+freq_str+'_R2.00_noise_'+type+'-2_sim'+sidx+'.fits'
 
             res1 = file_info(rh1_fits_file)
             res2 = file_info(rh2_fits_file)
@@ -64,11 +88,11 @@ pro write_noise_sims_fits, tgz=tgz, copy=copy
         
         if (keyword_set(tgz)) then begin
             cd, bin_path
-            spawn, 'tar -czf '+field_name+'.tgz '+field_name+'/sim_maps/*.fits'
+            spawn, 'tar -czf '+field_name+'.tgz '+field_name+'/fits_maps/*.fits'
         endif
 
         if (keyword_set(copy)) then begin
-            spawn, 'scp '+field_name+'.tgz hou@spt.uchicago.edu:/data23/hou/projects/spt_x_planck/powspec/planck_2013_halfring_noise_sims_cross/'
+            spawn, 'scp '+field_name+'.tgz hou@spt.uchicago.edu:/home/hou/data/projects/spt_x_planck/sims/noise/hfi_'+freq_str+'_R2.00_'+type+'/'
         endif
     endfor
 end
