@@ -23,8 +23,7 @@ pro write_noise_sims_fits, freq, type=type, tgz=tgz, copy=copy
 
         print, field_name
 
-        model_fits_file = home+'data/projects/spt_x_planck/planck_2015/reproj/'+field_name+'/hfi_SkyMap_'+freq_str+'_R2.00_'+type+'-1_O4_prj.fits.fits'
-
+        model_fits_file = home+'data/projects/spt_x_planck/planck_2015/reproj/'+field_name+'/hfi_SkyMap_'+freq_str+'_R2.00_'+type+'-1_O4_prj.fits'
         t = read_spt_fits(model_fits_file)
         nx = long(t.mapinfo.nsidex)
         ny = long( t.mapinfo.nsidey)
@@ -47,12 +46,12 @@ pro write_noise_sims_fits, freq, type=type, tgz=tgz, copy=copy
             if (res1.exists) then begin
                 new_dir = bin_path+field_name+'/bin_maps'
                 file_mkdir, new_dir
-                spawn, ['mv', rh1_bin_file, new_dir+'/'], /no_shell
+                spawn, ['mv', rh1_bin_file, new_dir+'/'], /noshell
                 rh1_bin_file = new_dir+'/hfi_143_R2.00_noise_'+type+'-1_sim'+sidx
             endif
 
             if (res2.exists) then begin
-                spawn, ['mv', rh2_bin_file, new_dir+'/'], /no_shell
+                spawn, ['mv', rh2_bin_file, new_dir+'/'], /noshell
                 rh2_bin_file = new_dir+'/hfi_143_R2.00_noise_'+type+'-2_sim'+sidx
             endif
 
@@ -88,11 +87,12 @@ pro write_noise_sims_fits, freq, type=type, tgz=tgz, copy=copy
         
         if (keyword_set(tgz)) then begin
             cd, bin_path
-            spawn, 'tar -czf '+field_name+'.tgz '+field_name+'/fits_maps/*.fits'
+            spawn, 'tar -czf binmaps_'+field_name+'.tgz '+field_name+'/bin_maps/*'
         endif
 
         if (keyword_set(copy)) then begin
-            spawn, 'scp '+field_name+'.tgz hou@spt.uchicago.edu:/home/hou/data/projects/spt_x_planck/sims/noise/hfi_'+freq_str+'_R2.00_'+type+'/'
+            spawn, 'scp binmaps_'+field_name+'.tgz hou@spt.uchicago.edu:/home/hou/data/projects/spt_x_planck/sims/noise/hfi_'+freq_str+'_R2.00_'+type+'/'
+            spawn, 'rm -rf binmaps_'+field_name+'.tgz'
         endif
     endfor
 end

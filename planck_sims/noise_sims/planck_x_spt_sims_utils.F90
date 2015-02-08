@@ -341,7 +341,7 @@ module planck_x_spt_sims_utils
                 i_end   = i_start + input_data%num_pixels(i_field) - 1
 
                 prj => proj%map_prj(i_start:i_end)
-                
+
                 !write(*,*) "writing projected map to field ", i_field
                 
                 filename = trim(params%output_path)//'/'//trim(fields_name(i_field))//'/'//trim(params%output_root)//'_sim'//trim(s_str)
