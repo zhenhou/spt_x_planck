@@ -14,8 +14,8 @@ pro write_sims_fits, freq, type=type, tgz=tgz, copy=copy
     freq_str = strcompress(string(freq), /remove)
 
     f = lps12_fieldstruct()
-    noise_bin_path  = home+'data/projects/spt_x_planck/sims/noise/hfi_'+freq_str+'_R2.00/'
-    signal_bin_path = home+'data/projects/spt_x_planck/sims/signal/hfi_'+freq_str+'_R2.00_'+type+'/'
+    signal_bin_path = home+'data/projects/spt_x_planck/sims/signal/hfi_'+freq_str+'_R2.00/'
+    noise_bin_path  = home+'data/projects/spt_x_planck/sims/noise/hfi_'+freq_str+'_R2.00_'+type+'/'
     splusn_bin_path = home+'data/projects/spt_x_planck/sims/signal+noise/hfi_'+freq_str+'_R2.00_'+type+'/'
 
     for i_field=0, num_fields-1 do begin
