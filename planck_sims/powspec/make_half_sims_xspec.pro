@@ -22,7 +22,7 @@ pro make_half_sims_xspec, ifield, freq, type=type
 
     ;; run 1, for xspec of halfmission/year noise sims (beam uncert is not included in sims)
     mapname = 'DMAP.MAP'
-    sim_map_root = 'hfi_'+freq_str+'_R2.00_'+type+'_'+['1','2']
+    sim_map_root = 'hfi_'+freq_str+'_R2.00_'+type+'-'+['1','2']
     dls_sav_root = 'dls_hfi_'+freq_str+'_R2.00_noise_'+type+'_xspec'
     dls_sims_path    = workpath+'/'+field_name+'/sim_dls'
     inf = file_info(dls_sims_path)
